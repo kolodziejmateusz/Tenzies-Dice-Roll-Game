@@ -15,15 +15,12 @@ export default function App() {
   console.log(generateAllNewDice());
 
   /**
-   * Challenge:
+   * Challenge: Create a `Roll Dice` button that will re-roll
+   * all 10 dice
    *
-   * Create state to hold our array of numbers. (Initialize
-   * the state by calling our `generateAllNewDice` function so it
-   * loads all new dice as soon as the app loads)
-   *
-   * Map over the state numbers array to generate our array
-   * of Die components and render those in place of our
-   * manually-written 10 Die elements.
+   * Clicking the button should generate a new array of numbers
+   * and set the `dice` state to that new array (thus re-rendering
+   * the array to the page)
    */
 
   const [dice, setDice] = useState(generateAllNewDice());
@@ -35,6 +32,12 @@ export default function App() {
           <Die key={index} value={num} />
         ))}
       </div>
+      <button
+        className="roll-dice"
+        onClick={() => setDice(generateAllNewDice())}
+      >
+        Roll
+      </button>
     </main>
   );
 }
