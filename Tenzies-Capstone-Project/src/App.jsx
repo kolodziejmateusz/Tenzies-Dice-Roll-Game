@@ -15,12 +15,12 @@ export default function App() {
   console.log(generateAllNewDice());
 
   /**
-   * Challenge: Update the array of numbers in state to be
-   * an array of objects instead. Each object should look like:
-   * { value: <random number>, isHeld: false }
+   * Challenge: Add conditional styling to the Die component
+   * so that if it's held (isHeld === true), its background color
+   * changes to a light green (#59E391)
    *
-   * Making this change will break parts of our code, so make
-   * sure to update things so we're back to a working state
+   * Remember: currently the Die component has no way of knowing
+   * if it's "held" or not.
    */
 
   const [dice, setDice] = useState(generateAllNewDice());
@@ -29,7 +29,7 @@ export default function App() {
     <main>
       <div className="dice-container">
         {dice.map((die, index) => (
-          <Die key={index} value={die.value} />
+          <Die key={index} value={die.value} isHeld={die.isHeld} />
         ))}
       </div>
       <button
