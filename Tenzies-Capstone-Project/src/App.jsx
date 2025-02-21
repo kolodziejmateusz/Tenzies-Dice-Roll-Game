@@ -1,5 +1,6 @@
 import Die from "./components/Die";
 import { useState } from "react";
+import { nanoid } from "nanoid";
 import "./App.css";
 
 export default function App() {
@@ -7,29 +8,38 @@ export default function App() {
     let numbers = [];
     for (let i = 0; i < 10; i++) {
       const randomNumber = Math.floor(Math.random() * (6 - 1) + 1);
-      numbers.push({ value: randomNumber, isHeld: false });
+      numbers.push({ id: nanoid(), value: randomNumber, isHeld: false });
     }
     return numbers;
   }
 
-  console.log(generateAllNewDice());
-
+  const [dice, setDice] = useState(generateAllNewDice());
   /**
-   * Challenge: Add conditional styling to the Die component
-   * so that if it's held (isHeld === true), its background color
-   * changes to a light green (#59E391)
+   * Challenge: Create a function `hold` that takes
+   * `id` as a parameter. For now, just have the function
+   * cons ole.log(id).
    *
-   * Remember: currently the Die component has no way of knowing
-   * if it's "held" or not.
+   * Then, figure out how to pass that function down to each
+   * instance of the Die component so when each one is clicked,
+   * it logs its own unique ID property. (Hint: there's more
+   * than one way to make that work, so just choose whichever
+   * you want)
    */
 
-  const [dice, setDice] = useState(generateAllNewDice());
+  function hold(id) {
+    console.log(id);
+  }
 
   return (
     <main>
       <div className="dice-container">
         {dice.map((die, index) => (
-          <Die key={index} value={die.value} isHeld={die.isHeld} />
+          <Die
+            key={index}
+            value={die.value}
+            isHeld={die.isHeld}
+            hold={() => hold(die.id)}
+          />
         ))}
       </div>
       <button
