@@ -4,27 +4,38 @@ import { nanoid } from "nanoid";
 import "./App.css";
 
 export default function App() {
+  const generateRandomNumber = () => Math.floor(Math.random() * (6 - 1) + 1);
   function generateAllNewDice() {
     let numbers = [];
     for (let i = 0; i < 10; i++) {
-      const randomNumber = Math.floor(Math.random() * (6 - 1) + 1);
-      numbers.push({ id: nanoid(), value: randomNumber, isHeld: false });
+      numbers.push({
+        id: nanoid(),
+        value: generateRandomNumber(),
+        isHeld: false,
+      });
     }
     return numbers;
   }
 
   const [dice, setDice] = useState(generateAllNewDice());
+
   /**
-   * Challenge: Create a function `hold` that takes
-   * `id` as a parameter. For now, just have the function
-   * cons ole.log(id).
+   * Challenge: Update the `rollDice` function to not just roll
+   * all new dice, but instead to look through the existing dice
+   * to NOT role any that are being `held`.
    *
-   * Then, figure out how to pass that function down to each
-   * instance of the Die component so when each one is clicked,
-   * it logs its own unique ID property. (Hint: there's more
-   * than one way to make that work, so just choose whichever
-   * you want)
+   * Hint: this will look relatively similiar to the `hold`
+   * function below. When we're "rolling" a die, we're really
+   * just updating the `value` property of the die object.
    */
+
+  function rollDice() {
+    setDice((prevDice) =>
+      prevDice.map((item) => {
+        return item.isHeld ? item : { ...item, value: generateRandomNumber() };
+      })
+    );
+  }
 
   function hold(id) {
     console.log(id);
@@ -38,6 +49,11 @@ export default function App() {
 
   return (
     <main>
+      <h1 className="title">Tenzies</h1>
+      <p className="instructions">
+        Roll until all dice are the same. Click each die to freeze it at its
+        current value between rolls.
+      </p>
       <div className="dice-container">
         {dice.map((die, index) => (
           <Die
@@ -48,10 +64,7 @@ export default function App() {
           />
         ))}
       </div>
-      <button
-        className="roll-dice"
-        onClick={() => setDice(generateAllNewDice())}
-      >
+      <button className="roll-dice" onClick={() => rollDice()}>
         Roll
       </button>
     </main>
