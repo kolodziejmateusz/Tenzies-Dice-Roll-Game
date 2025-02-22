@@ -6,7 +6,7 @@ import "./App.css";
 
 export default function App() {
   const generateRandomNumber = () => Math.floor(Math.random() * (6 - 1) + 1);
-  const [dice, setDice] = useState(generateAllNewDice());
+  const [dice, setDice] = useState(() => generateAllNewDice());
 
   const gameIsWon =
     dice.every((item) => item.isHeld) &&
