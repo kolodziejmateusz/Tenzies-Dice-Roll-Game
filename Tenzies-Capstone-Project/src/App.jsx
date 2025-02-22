@@ -5,6 +5,16 @@ import "./App.css";
 
 export default function App() {
   const generateRandomNumber = () => Math.floor(Math.random() * (6 - 1) + 1);
+  const [dice, setDice] = useState(generateAllNewDice());
+
+  const gameIsWon =
+    dice.every((item) => item.isHeld) &&
+    dice.every((item) => item.value == dice[0].value);
+
+  if (gameIsWon) {
+    console.log("You won");
+  }
+
   function generateAllNewDice() {
     let numbers = [];
     for (let i = 0; i < 10; i++) {
@@ -17,29 +27,21 @@ export default function App() {
     return numbers;
   }
 
-  const [dice, setDice] = useState(generateAllNewDice());
-
-  /**
-   * Challenge: Update the `rollDice` function to not just roll
-   * all new dice, but instead to look through the existing dice
-   * to NOT role any that are being `held`.
-   *
-   * Hint: this will look relatively similiar to the `hold`
-   * function below. When we're "rolling" a die, we're really
-   * just updating the `value` property of the die object.
-   */
-
   function rollDice() {
-    setDice((prevDice) =>
-      prevDice.map((item) => {
-        return item.isHeld ? item : { ...item, value: generateRandomNumber() };
-      })
-    );
+    if (gameIsWon) {
+      setDice(generateAllNewDice());
+    } else {
+      setDice((prevDice) =>
+        prevDice.map((item) => {
+          return item.isHeld
+            ? item
+            : { ...item, value: generateRandomNumber() };
+        })
+      );
+    }
   }
 
   function hold(id) {
-    console.log(id);
-
     setDice((prevDice) =>
       prevDice.map((item) => {
         return item.id === id ? { ...item, isHeld: !item.isHeld } : item;
@@ -65,7 +67,7 @@ export default function App() {
         ))}
       </div>
       <button className="roll-dice" onClick={() => rollDice()}>
-        Roll
+        {gameIsWon ? "New Game" : "Roll"}
       </button>
     </main>
   );
