@@ -1,5 +1,5 @@
 import Die from "./components/Die";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
 import "./App.css";
@@ -7,14 +7,17 @@ import "./App.css";
 export default function App() {
   const generateRandomNumber = () => Math.floor(Math.random() * (6 - 1) + 1);
   const [dice, setDice] = useState(() => generateAllNewDice());
+  const buttonRef = useRef(null);
 
   const gameIsWon =
     dice.every((item) => item.isHeld) &&
     dice.every((item) => item.value == dice[0].value);
 
-  if (gameIsWon) {
-    console.log("You won");
-  }
+  useEffect(() => {
+    if (gameIsWon) {
+      buttonRef.current.focus();
+    }
+  }, [gameIsWon]);
 
   function generateAllNewDice() {
     let numbers = [];
@@ -73,7 +76,7 @@ export default function App() {
           />
         ))}
       </div>
-      <button className="roll-dice" onClick={() => rollDice()}>
+      <button ref={buttonRef} className="roll-dice" onClick={() => rollDice()}>
         {gameIsWon ? "New Game" : "Roll"}
       </button>
     </main>
